@@ -23,8 +23,9 @@ router.post('/', async (req, res, next) => {
     var passwordHash = await awaitPasswordHash(req.body.password);
     var valid = await database.isValidLogin(req.body.email, passwordHash);
     if (!valid)
-        res.sendFile('views/login.html', {root: '.'});
-    res.sendFile('dashboard.html', {root: './views'});
+        res.sendFile('login.html', {root: './views'});
+    console.log("gets here");
+    res.redirect('/dashboard');
 });
 
 router.get('/createaccount', async (req, res, next) => {

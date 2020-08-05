@@ -1,4 +1,4 @@
-DROP DATABASE carpoolr;
+DROP DATABASE IF EXISTS carpoolr;
 CREATE DATABASE carpoolr;
 USE carpoolr;
 
@@ -12,12 +12,9 @@ CREATE TABLE users
 );
 CREATE TABLE trips
 (
-	-- guid CHAR(38) PRIMARY KEY,
-    
-	-- owner CHAR(38) NOT NULL,
-    owner_email VARCHAR(50) NOT NULL,
-    
-    display_name VARCHAR(50) NOT NULL UNIQUE,
+	guid CHAR(36) PRIMARY KEY,
+	owner CHAR(38) NOT NULL,
+    display_name VARCHAR(50) NOT NULL,
     creation_date DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 CREATE TABLE riders
