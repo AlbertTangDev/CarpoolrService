@@ -8,7 +8,7 @@ CREATE TABLE users
 	email VARCHAR(50) NOT NULL,
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
-	password_hash BINARY(60) NOT NULL
+	password_hash CHAR(60) NOT NULL
 );
 CREATE TABLE trips
 (
@@ -50,5 +50,5 @@ INSERT INTO users (guid, first_name, last_name, email, password_hash) VALUES (
     'Albert',
     'Tang',
     'atang@bluebeam.com',
-    '$2b$10$o0Nlzp6CFopqNxb6Mme6cujihCJaXZLA3dw1XuiGdYB5bu5bWF5FC'
+    '$2b$10$opfN756Y9lt2.pwBDGVIMuISZ9s62B94pe6O6rgZk2VXHHseckNz.'
 );

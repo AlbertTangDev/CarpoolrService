@@ -1,48 +1,50 @@
 const express = require('express');
-const bcrypt = require('bcrypt');
 const uuid = require('uuid');
 
+const auth = require('../auth');
 const database = require('../data/database');
-
-const saltRounds = 10;
 
 const router = express.Router();
 
-const awaitPasswordHash = async (password) => new Promise((resolve, reject) => {
-    bcrypt.hash(password, saltRounds, function(err, hash) {
-        if (err) reject(err);
-        resolve(hash);
-    });
-});
-
-router.get('/', async (req, res, next) => {
+router.get('/', auth.redirectToDashboardIfValidCookieSent, async (req, res, next) => {
     res.sendFile('views/login.html', {root: '.'});
 });
 
 router.post('/', async (req, res, next) => {
-    var passwordHash = await awaitPasswordHash(req.body.password);
-    var valid = await database.isValidLogin(req.body.email, passwordHash);
-    if (!valid)
-        res.sendFile('login.html', {root: './views'});
-    console.log("gets here");
-    res.redirect('/dashboard');
+    if (!req.body || !req.body.email || !req.body.password)
+        return res.redirect(401, '/login');
+
+    var passwordHash = await database.getPasswordHashFromEmail(req.body.email);
+    if (!passwordHash)
+        return res.redirect(401, '/login');
+
+    var valid = await auth.awaitValidatePassword(req.body.password, passwordHash);
+    if (!valid) 
+        return res.redirect(401, './login');
+
+    const guid = await database.getUserGuidFromEmail(req.body.email);
+    const accessToken = auth.generateJWT(guid);
+    res.set('Carpoolr-Guid', guid);
+    res.set('Carpoolr-Token', accessToken);
+    res.send();
 });
 
-router.get('/createaccount', async (req, res, next) => {
+router.get('/createaccount', auth.redirectToDashboardIfValidCookieSent, async (req, res, next) => {
     res.sendFile('createaccount.html', {root: './views'});
 });
 
 router.post('/createaccount', async (req, res, next) => {
-    console.log(req.body);
     var emailExists = await database.doesEmailExist(req.body.email);
     if (emailExists) {
         res.sendFile('createaccount.html', {root: './views'});
     }
-
-    var guid = uuid.v4();
-    var passwordHash = await awaitPasswordHash(req.body.password);
-    await database.createUserAccount(guid, req.body['first-name'], req.body['last-name'], req.body.email, passwordHash);
-    res.sendFile('login.html', {root: './views'});
+    else {
+        var guid = uuid.v4();
+        var passwordHash = await auth.awaitGeneratePasswordHash(req.body.password);
+        console.log(passwordHash+" and "+passwordHash2+" and "+passwordHash3);
+        await database.createUserAccount(guid, req.body['first-name'], req.body['last-name'], req.body.email, passwordHash);
+        res.redirect('/login');
+    }
 });
 
 module.exports = router;

@@ -1,6 +1,6 @@
-const mysql = require('mysql-await');
+const awaitmysql = require('mysql-await');
 
-var con = mysql.createConnection({
+const awaitcon = awaitmysql.createConnection({
     host: "localhost",
     user: "root",
     password: "P@55w0rd",
@@ -17,33 +17,40 @@ class User {
 
 async function TryCatchAwait(query) {
     try {
-        return result = await con.awaitQuery(query);
+        return result = await awaitcon.awaitQuery(query);
     } catch (err) {
         throw err;
     }
 }
 
 exports.doesEmailExist = async (email) => {
-    var query = `SELECT * FROM users WHERE email='${email}'`;
+    const query = `SELECT * FROM users WHERE email='${email}'`;
     result = await TryCatchAwait(query);
     if (result.length === 0)
         return false;
     return true;
+}
+
+exports.getPasswordHashFromEmail = async (email) => {
+    const query = `SELECT password_hash FROM USERS WHERE email='${email}'`;
+    const result = await TryCatchAwait(query);
+    if (result.length === 0)
+        return null;
+    return result[0].password_hash;
+}
+
+exports.getUserGuidFromEmail = async (email) => {
+    const query = `SELECT guid FROM users WHERE email='${email}'`;
+    const result = await TryCatchAwait(query);
+    if (result.length === 0)
+        return null;
+    return result[0].guid;
 }
 
 exports.createUserAccount = async (guid, firstName, lastName, email, passwordHash) => {
-    console.log(guid.length+": "+guid);
     var query = `INSERT INTO users (guid, first_name, last_name, email, password_hash) VALUES ('${guid}', '${firstName}', '${lastName}', '${email}', '${passwordHash}')`
     await TryCatchAwait(query);
     return guid;
-}
-
-exports.isValidLogin = async (email, passwordHash) => {
-    var query = `SELECT * FROM users WHERE email='${email}' AND password_hash = '${passwordHash}'`
-    result = await TryCatchAwait(query);
-    if (result.length === 0)
-        return false;
-    return true;
 }
 
 exports.getUser = async (email, next) => {

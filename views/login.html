@@ -9,13 +9,16 @@
         </h3>
     </head>
     <body>
-        <form method="POST">
+        <form id="login-form" method="POST">
             <label for="email">Email</label>
-            <input type="text" id="email" name="email">
+            <input type="text" id="email-field" name="email">
             <label for="password">Password</label>
-            <input type="password" id="password" name="password">
+            <input type="password" id="password-field" name="password">
             <input type="submit" value="Log In">
         </form>
         <a href="/login/createaccount">Create Account</a>
+
+        <script src="/javascripts/jquery-3.5.1.js" type="text/javascript"></script>
+        <script src="/javascripts/authentication.js" type="text/javascript"></script>
     </body>
 </html>
