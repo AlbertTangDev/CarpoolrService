@@ -34,14 +34,14 @@ router.get('/createaccount', auth.redirectToDashboardIfValidCookieSent, async (r
 });
 
 router.post('/createaccount', async (req, res, next) => {
+    console.log(' gets here');
     var emailExists = await database.doesEmailExist(req.body.email);
     if (emailExists) {
-        res.sendFile('createaccount.html', {root: './views'});
+        res.redirect('/createaccount');
     }
     else {
         var guid = uuid.v4();
         var passwordHash = await auth.awaitGeneratePasswordHash(req.body.password);
-        console.log(passwordHash+" and "+passwordHash2+" and "+passwordHash3);
         await database.createUserAccount(guid, req.body['first-name'], req.body['last-name'], req.body.email, passwordHash);
         res.redirect('/login');
     }
