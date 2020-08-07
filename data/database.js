@@ -70,3 +70,8 @@ exports.createTrip = async (userGuid, tripName) => {
     await TryCatchAwait(query);
     return tripGuid;
 }
+
+/* riders table */
+
+
+/* vehicles table */
