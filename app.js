@@ -7,6 +7,7 @@ var stylus = require('stylus');
 const bodyParser = require('body-parser');
 
 var indexRouter = require('./routes/index');
+var apiRouter = require('./routes/api');
 var loginRouter = require('./routes/login');
 var usersRouter = require('./routes/users');
 var dashboardRouter = require('./routes/dashboard');
@@ -25,6 +26,7 @@ app.use(stylus.middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/api', apiRouter);
 app.use('/login', loginRouter);
 app.use('/users', usersRouter);
 app.use('/dashboard', dashboardRouter);

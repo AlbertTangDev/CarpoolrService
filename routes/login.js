@@ -1,5 +1,4 @@
 const express = require('express');
-const uuid = require('uuid');
 
 const auth = require('../auth');
 const database = require('../data/database');
@@ -14,11 +13,11 @@ router.post('/', async (req, res, next) => {
     if (!req.body || !req.body.email || !req.body.password)
         return res.redirect(401, '/login');
 
-    var passwordHash = await database.getPasswordHashFromEmail(req.body.email);
+    const passwordHash = await database.getPasswordHashFromEmail(req.body.email);
     if (!passwordHash)
         return res.redirect(401, '/login');
 
-    var valid = await auth.awaitValidatePassword(req.body.password, passwordHash);
+    const valid = await auth.awaitValidatePassword(req.body.password, passwordHash);
     if (!valid) 
         return res.redirect(401, './login');
 
@@ -35,14 +34,13 @@ router.get('/createaccount', auth.redirectToDashboardIfValidCookieSent, async (r
 
 router.post('/createaccount', async (req, res, next) => {
     console.log(' gets here');
-    var emailExists = await database.doesEmailExist(req.body.email);
+    const emailExists = await database.doesEmailExist(req.body.email);
     if (emailExists) {
         res.redirect('/createaccount');
     }
     else {
-        var guid = uuid.v4();
-        var passwordHash = await auth.awaitGeneratePasswordHash(req.body.password);
-        await database.createUserAccount(guid, req.body['first-name'], req.body['last-name'], req.body.email, passwordHash);
+        const passwordHash = await auth.awaitGeneratePasswordHash(req.body.password);
+        await database.createUserAccount(req.body['first-name'], req.body['last-name'], req.body.email, passwordHash);
         res.redirect('/login');
     }
 });

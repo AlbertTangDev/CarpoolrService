@@ -10,14 +10,19 @@
         </h3>
     </head>
     <body>
-        <h5>Create New Carpool</h5>
+        <h5>Create New Trip</h5>
         <form method="POST">
-            <label for="carpool-name">Carpool Name</label>
-            <input type="text" id="carpool-name" name="carpool-name">
-            <input type="submit" value="Create Carpool">
+            <label for="trip-name">Trip Name</label>
+            <input type="text" id="trip-name" name="trip-name">
+            <input type="submit" value="Create Trip">
         </form>
+        <h5>Your Trips</h5>
+        <div id="trip-list">
+            <p id="no-trip-message">You have no trips. Plan one today!</p>
+        </div>
 
         <script src="/javascripts/jquery-3.5.1.js" type="text/javascript"></script>
-        <script src="/javascripts/authentication.js" type="text/javascript"></script>
+        <script src="/javascripts/dashboard.js" type="text/javascript"></script>
+        <script src="/javascripts/logout.js" type="text/javascript"></script>
     </body>
 </html>

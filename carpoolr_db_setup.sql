@@ -13,15 +13,16 @@ CREATE TABLE users
 CREATE TABLE trips
 (
 	guid CHAR(36) PRIMARY KEY,
-	owner CHAR(38) NOT NULL,
+	owner CHAR(36) NOT NULL,
     display_name VARCHAR(50) NOT NULL,
-    creation_date DATETIME DEFAULT CURRENT_TIMESTAMP
+    accessed_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    created_date DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 CREATE TABLE riders
 (
-	-- guid CHAR(38) PRIMARY KEY,
+	-- guid CHAR(36) PRIMARY KEY,
     
-    trip CHAR(38) NOT NULL,
+    trip CHAR(36) NOT NULL,
     -- associated_user CHAR(38),
     associated_user_name VARCHAR(5),
     
@@ -32,12 +33,12 @@ CREATE TABLE riders
 );
 CREATE TABLE vehicles
 (
-	-- guid char(38) PRIMARY KEY,
+	-- guid char(36) PRIMARY KEY,
     
-    -- associated_rider CHAR(38) NOT NULL,
+    -- associated_rider CHAR(36) NOT NULL,
     associated_rider_name VARCHAR(50) NOT NULL,
     
-    -- trip CHAR(38) NOT NULL,
+    -- trip CHAR(36) NOT NULL,
     trip_name VARCHAR(50) NOT NULL,
     
     display_name VARCHAR(50) NOT NULL UNIQUE,
